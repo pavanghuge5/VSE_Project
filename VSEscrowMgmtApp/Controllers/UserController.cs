@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using VSEscrowMgmtApp.Models;
 
 namespace VSEscrowMgmtApp.Controllers
@@ -38,7 +39,7 @@ namespace VSEscrowMgmtApp.Controllers
         {
             using(var db  = new VsescrowContext())
             {
-                var user = db.Users.FirstOrDefault(u => login.Username == u.Username);
+                var user = db.Users.Include(u => u.Role).FirstOrDefault(u => login.Username == u.Username);
                 if (user != null && BCrypt.Net.BCrypt.Verify(login.Password, user.Password)) {
                     return user;
                 }
