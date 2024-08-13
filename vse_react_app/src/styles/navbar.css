@@ -1,0 +1,20 @@
+/* navbar.css */
+.navbar {
+    padding: 0.5rem 1rem;
+  }
+  
+  .navbar-brand {
+    font-weight: bold;
+  }
+  
+  .nav-link {
+    margin-left: 1rem;
+  }
+  
+  .nav-link.active {
+    color: #007bff;
+  }
+  
+  .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml, ..."); /* Use default or custom icon */
+  }
