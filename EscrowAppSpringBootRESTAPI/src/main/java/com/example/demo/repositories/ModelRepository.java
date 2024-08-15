@@ -5,5 +5,7 @@ import com.example.demo.entities.Model;
 import java.util.List;
 
 public interface ModelRepository extends JpaRepository<Model, Integer> {
-    List<Model> findByCompanyCompanyId(int companyId);
+//    List<Model> findByCompanyCompanyId(int companyId);
+	
+	List<Model> findByModelNameIgnoreCase(String modelName);
 }

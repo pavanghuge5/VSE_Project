@@ -26,10 +26,6 @@ public class ModelService {
         return modelRepository.findById(modelId);
     }
 
-    public List<Model> getModelsByCompanyId(int companyId) {
-        return modelRepository.findByCompanyCompanyId(companyId);
-    }
-
     public void deleteModelById(int modelId) {
         modelRepository.deleteById(modelId);
     }

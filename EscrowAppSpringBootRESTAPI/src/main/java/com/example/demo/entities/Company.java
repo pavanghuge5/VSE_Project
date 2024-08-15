@@ -19,13 +19,13 @@ public class Company {
 
     @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
-    private List<Models> models;
+    private List<Model> models;
 
     public Company() {
         super();
     }
 
-    public Company(int companyId, String companyName, List<Models> models) {
+    public Company(int companyId, String companyName, List<Model> models) {
         this.companyId = companyId;
         this.companyName = companyName;
         this.models = models;
@@ -48,11 +48,11 @@ public class Company {
         this.companyName = companyName;
     }
 
-    public List<Models> getModels() {
+    public List<Model> getModels() {
         return models;
     }
 
-    public void setModels(List<Models> models) {
+    public void setModels(List<Model> models) {
         this.models = models;
     }
 }

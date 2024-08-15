@@ -20,7 +20,7 @@ public class Vehicle {
     private Seller seller;
 
     @ManyToOne
-    @JoinColumn(name = "com_id", nullable = true)
+    @JoinColumn(name = "com_id", nullable = false)
     private Company company;
 
     @ManyToOne
@@ -60,6 +60,9 @@ public class Vehicle {
 
     @Column(name = "v_price")
     private int vehiclePrice;
+    
+    @Column(name = "status", nullable = false)
+    private int status;
 
     // Default constructor
     public Vehicle() {
@@ -68,27 +71,28 @@ public class Vehicle {
 
     // Parameterized constructor
     public Vehicle(int vehicleId, Model model, Seller seller, Company company,
-                   Category category, SubCategory subCategory, String registrationYear,
-                   String kmsDriven, String fuelType, int noOfSeats, int ownership,
-                   String transmission, int engineCapacity, String rto, String vehicleImages,
-                   int vehiclePrice) {
-        this.vehicleId = vehicleId;
-        this.model = model;
-        this.seller = seller;
-        this.company = company;
-        this.category = category;
-        this.subCategory = subCategory;
-        this.registrationYear = registrationYear;
-        this.kmsDriven = kmsDriven;
-        this.fuelType = fuelType;
-        this.noOfSeats = noOfSeats;
-        this.ownership = ownership;
-        this.transmission = transmission;
-        this.engineCapacity = engineCapacity;
-        this.rto = rto;
-        this.vehicleImages = vehicleImages;
-        this.vehiclePrice = vehiclePrice;
-    }
+            Category category, SubCategory subCategory, String registrationYear,
+            String kmsDriven, String fuelType, int noOfSeats, int ownership,
+            String transmission, int engineCapacity, String rto, String vehicleImages,
+            int vehiclePrice, int status) {
+		 this.vehicleId = vehicleId;
+		 this.model = model;
+		 this.seller = seller;
+		 this.company = company;
+		 this.category = category;
+		 this.subCategory = subCategory;
+		 this.registrationYear = registrationYear;
+		 this.kmsDriven = kmsDriven;
+		 this.fuelType = fuelType;
+		 this.noOfSeats = noOfSeats;
+		 this.ownership = ownership;
+		 this.transmission = transmission;
+		 this.engineCapacity = engineCapacity;
+		 this.rto = rto;
+		 this.vehicleImages = vehicleImages;
+		 this.vehiclePrice = vehiclePrice;
+		 this.status = status;
+}
 
     // Getters and Setters
     public int getVehicleId() {
@@ -97,6 +101,14 @@ public class Vehicle {
 
     public void setVehicleId(int vehicleId) {
         this.vehicleId = vehicleId;
+    }
+    
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 
     public Model getModel() {

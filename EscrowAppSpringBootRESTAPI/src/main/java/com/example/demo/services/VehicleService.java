@@ -13,6 +13,11 @@ public class VehicleService {
 
     @Autowired
     private VehicleRepository vehicleRepository;
+    
+    
+    public List<Vehicle> findVehiclesByModelName(String modelName) {
+        return vehicleRepository.findByModelName(modelName);
+    }
 
     public Vehicle saveVehicle(Vehicle vehicle) {
         return vehicleRepository.save(vehicle);
@@ -25,6 +30,7 @@ public class VehicleService {
     public Optional<Vehicle> getVehicleById(int vehicleId) {
         return vehicleRepository.findById(vehicleId);
     }
+    
 
     public void deleteVehicleById(int vehicleId) {
         vehicleRepository.deleteById(vehicleId);
