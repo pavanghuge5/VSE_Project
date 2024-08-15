@@ -12,23 +12,23 @@ public class Vehicle {
     private int vehicleId;
 
     @ManyToOne
-    @JoinColumn(name = "model_id")
-    private Models model;
+    @JoinColumn(name = "model_id", nullable = false)
+    private Model model;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "s_id")
+    @ManyToOne
+    @JoinColumn(name = "s_id", nullable = false)
     private Seller seller;
 
     @ManyToOne
-    @JoinColumn(name = "com_id")
+    @JoinColumn(name = "com_id", nullable = true)
     private Company company;
 
     @ManyToOne
-    @JoinColumn(name = "cat_id")
+    @JoinColumn(name = "cat_id", nullable = false)
     private Category category;
 
     @ManyToOne
-    @JoinColumn(name = "scat_id")
+    @JoinColumn(name = "scat_id", nullable = false)
     private SubCategory subCategory;
 
     @Column(name = "registration_year")
@@ -67,7 +67,7 @@ public class Vehicle {
     }
 
     // Parameterized constructor
-    public Vehicle(int vehicleId, Models model, Seller seller, Company company,
+    public Vehicle(int vehicleId, Model model, Seller seller, Company company,
                    Category category, SubCategory subCategory, String registrationYear,
                    String kmsDriven, String fuelType, int noOfSeats, int ownership,
                    String transmission, int engineCapacity, String rto, String vehicleImages,
@@ -99,11 +99,11 @@ public class Vehicle {
         this.vehicleId = vehicleId;
     }
 
-    public Models getModel() {
+    public Model getModel() {
         return model;
     }
 
-    public void setModel(Models model) {
+    public void setModel(Model model) {
         this.model = model;
     }
 
