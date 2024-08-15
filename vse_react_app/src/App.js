@@ -12,12 +12,10 @@ import HomePage from './components/HomePage';
 
 
 
-
-
 function App() {
   return (
     <div className="App">
-       <UserAuthProvider>
+      <UserAuthProvider>
         <Routes>
           <Route path="/" element={< HomePage />} />
           <Route path="/login" element={<Login />} />
@@ -25,7 +23,6 @@ function App() {
           <Route path="/buyer" element={<BuyerPage />}/>
           <Route path="/seller" element={<SellerPage /> } />
           <Route path="/admin" element={<AdminPage />} />
-
         </Routes>
       </UserAuthProvider>
     </div>

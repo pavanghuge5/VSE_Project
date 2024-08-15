@@ -3,7 +3,6 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styles/registration.css';
-import Navbar from './Navbar';
 
 function Registration() {
   const [formData, setFormData] = useState({
@@ -13,7 +12,9 @@ function Registration() {
     lname: '',
     contact: '',
     address: '',
-    email: '', // Added email field
+    accNo: '',
+    bankName: '',
+    ifscCode: '',
     password: '',
     role_id: 2
   });
@@ -55,11 +56,17 @@ function Registration() {
     if (!/^(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/.test(formData.password)) {
       errors.password = 'Password must be at least 8 characters long, include at least one uppercase letter, one lowercase letter, and one digit or special character.';
     }
-    if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      errors.email = 'A valid email address is required.';
+    if (!/^\d{11,16}$/.test(formData.accNo)) {
+      errors.accNo = 'Bank account number must be between 11 and 16 digits.';
+    }
+    if (!/^[A-Za-z]{4}0\d{6}$/.test(formData.ifscCode)) {
+      errors.ifscCode = 'IFSC code must be 11 characters: 4 alphabets, followed by 0, and ending with 6 digits.';
     }
     if (!formData.address.trim()) {
       errors.address = 'Address is required.';
+    }
+    if (!formData.bankName.trim()) {
+      errors.bankName = 'Bank name is required.';
     }
 
     setFormErrors(errors);
@@ -68,7 +75,7 @@ function Registration() {
 
   const checkUsernameAvailability = async (username) => {
     try {
-      const response = await axios.get(`https://localhost:7278/api/User/CheckUsername/${username}`);
+      const response = await axios.get(`https://localhost:7289/api/User/CheckUsername/${username}`);
       setUsernameAvailable(response.data.available);
     } catch (error) {
       console.error('There was an error checking the username!', error);
@@ -95,20 +102,23 @@ function Registration() {
       Fname: formData.fname,
       Lname: formData.lname,
       Address: formData.address,
-      Email: formData.email, // Added email field
+      BankName: formData.bankName,
+      IfscCode: formData.ifscCode,
       User: user
     };
 
     if (formData.userType === 'buyer') {
       userDetails.BContact = formData.contact;
+      userDetails.BAccNo = formData.accNo;
     } else if (formData.userType === 'seller') {
       userDetails.SContact = formData.contact;
+      userDetails.SAccNo = formData.accNo;
     }
 
     try {
       const endpoint = formData.userType === 'seller'
-        ? 'https://localhost:7278/api/User/SaveSeller'
-        : 'https://localhost:7278/api/User/SaveBuyer';
+        ? 'https://localhost:7289/api/User/SaveSeller'
+        : 'https://localhost:7289/api/User/SaveBuyer';
       await axios.post(endpoint, userDetails);
       alert(`Registration successful for ${formData.userType}`);
       navigate(`/${formData.userType}`);
@@ -119,120 +129,137 @@ function Registration() {
   };
 
   return (
-    <div>
-      <Navbar />
-      <div className="registration-container">
-        <div className="card">
-          <div className="card-header text-center">
-            <h2>Register as {formData.userType.charAt(0).toUpperCase() + formData.userType.slice(1)}</h2>
-          </div>
-          <div className="card-body">
-            <form onSubmit={handleSubmit}>
-              <div className="mb-3">
-                <label className="form-label">Register As</label>
-                <select
-                  style={{ textAlign: 'center' }}
-                  className="form-control"
-                  name="userType"
-                  value={formData.userType}
+    <div className="registration-container">
+      <div className="card">
+        <div className="card-header text-center">
+          <h2>Register as {formData.userType.charAt(0).toUpperCase() + formData.userType.slice(1)}</h2>
+        </div>
+        <div className="card-body">
+          <form onSubmit={handleSubmit}>
+            <div className="mb-3">
+              <label className="form-label">Register As</label>
+              <select style={{textAlign: 'center'}} className="form-control" name="userType" value={formData.userType} onChange={handleChange}>
+                <option value="seller">Seller</option>
+                <option value="buyer">Buyer</option>
+              </select>
+            </div>
+            <div className="row mb-3">
+              <div className="col-md-6">
+                <label className="form-label">Username:</label>
+                <input
+                  type="text"
+                  className={`form-control ${!usernameAvailable ? 'is-invalid' : ''}`}
+                  name="username"
+                  value={formData.username}
                   onChange={handleChange}
-                >
-                  <option value="seller">Seller</option>
-                  <option value="buyer">Buyer</option>
-                </select>
+                  required
+                />
+                {!usernameAvailable && <div className="invalid-feedback">Username is already taken. Please choose another one.</div>}
               </div>
-              <div className="row mb-3">
-                <div className="col-md-6">
-                  <label className="form-label">Username:</label>
-                  <input
-                    type="text"
-                    className={`form-control ${!usernameAvailable ? 'is-invalid' : ''}`}
-                    name="username"
-                    value={formData.username}
-                    onChange={handleChange}
-                    required
-                  />
-                  {!usernameAvailable && <div className="invalid-feedback">Username is already taken. Please choose another one.</div>}
-                </div>
-                <div className="col-md-6">
-                  <label className="form-label">Password:</label>
-                  <input
-                    type="password"
-                    className="form-control"
-                    name="password"
-                    value={formData.password}
-                    onChange={handleChange}
-                    required
-                  />
-                  {formErrors.password && <div className="alert alert-danger mt-2">{formErrors.password}</div>}
-                </div>
+              <div className="col-md-6">
+                <label className="form-label">Password:</label>
+                <input
+                  type="password"
+                  className="form-control"
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  required
+                />
+                {formErrors.password && <div className="alert alert-danger mt-2">{formErrors.password}</div>}
               </div>
-              <div className="row mb-3">
-                <div className="col-md-6">
-                  <label className="form-label">First Name:</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    name="fname"
-                    value={formData.fname}
-                    onChange={handleChange}
-                    required
-                  />
-                  {formErrors.fname && <div className="alert alert-danger mt-2">{formErrors.fname}</div>}
-                </div>
-                <div className="col-md-6">
-                  <label className="form-label">Last Name:</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    name="lname"
-                    value={formData.lname}
-                    onChange={handleChange}
-                    required
-                  />
-                  {formErrors.lname && <div className="alert alert-danger mt-2">{formErrors.lname}</div>}
-                </div>
-              </div>
-              <div className="mb-3">
-                <label className="form-label">Contact:</label>
+            </div>
+            <div className="row mb-3">
+              <div className="col-md-6">
+                <label className="form-label">First Name:</label>
                 <input
                   type="text"
                   className="form-control"
-                  name="contact"
-                  value={formData.contact}
+                  name="fname"
+                  value={formData.fname}
                   onChange={handleChange}
                   required
                 />
-                {formErrors.contact && <div className="alert alert-danger mt-2">{formErrors.contact}</div>}
+                {formErrors.fname && <div className="alert alert-danger mt-2">{formErrors.fname}</div>}
               </div>
-              <div className="mb-3">
-                <label className="form-label">Address:</label>
+              <div className="col-md-6">
+                <label className="form-label">Last Name:</label>
                 <input
                   type="text"
                   className="form-control"
-                  name="address"
-                  value={formData.address}
+                  name="lname"
+                  value={formData.lname}
                   onChange={handleChange}
                   required
                 />
-                {formErrors.address && <div className="alert alert-danger mt-2">{formErrors.address}</div>}
+                {formErrors.lname && <div className="alert alert-danger mt-2">{formErrors.lname}</div>}
               </div>
-              <div className="mb-3">
-                <label className="form-label">Email:</label>
+            </div>
+            <div className="mb-3">
+              <label className="form-label">Contact:</label>
+              <input
+                type="text"
+                className="form-control"
+                name="contact"
+                value={formData.contact}
+                onChange={handleChange}
+                required
+              />
+              {formErrors.contact && <div className="alert alert-danger mt-2">{formErrors.contact}</div>}
+            </div>
+            <div className="mb-3">
+              <label className="form-label">Address:</label>
+              <input
+                type="text"
+                className="form-control"
+                name="address"
+                value={formData.address}
+                onChange={handleChange}
+                required
+              />
+              {formErrors.address && <div className="alert alert-danger mt-2">{formErrors.address}</div>}
+            </div>
+            <div className="row mb-3">
+              <div className="col-md-6">
+                <label className="form-label">Account Number:</label>
                 <input
-                  type="email"
+                  type="text"
                   className="form-control"
-                  name="email"
-                  value={formData.email}
+                  name="accNo"
+                  value={formData.accNo}
                   onChange={handleChange}
                   required
                 />
-                {formErrors.email && <div className="alert alert-danger mt-2">{formErrors.email}</div>}
+                {formErrors.accNo && <div className="alert alert-danger mt-2">{formErrors.accNo}</div>}
               </div>
-              {registrationError && <div className="alert alert-danger mt-2">{registrationError}</div>}
-              <button type="submit" className="btn btn-primary">Register</button>
-            </form>
-          </div>
+              <div className="col-md-6">
+                <label className="form-label">IFSC Code:</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  name="ifscCode"
+                  value={formData.ifscCode}
+                  onChange={handleChange}
+                  required
+                />
+                {formErrors.ifscCode && <div className="alert alert-danger mt-2">{formErrors.ifscCode}</div>}
+              </div>
+            </div>
+            <div className="mb-3">
+              <label className="form-label">Bank Name:</label>
+              <input
+                type="text"
+                className="form-control"
+                name="bankName"
+                value={formData.bankName}
+                onChange={handleChange}
+                required
+              />
+              {formErrors.bankName && <div className="alert alert-danger mt-2">{formErrors.bankName}</div>}
+            </div>
+            {registrationError && <div className="alert alert-danger mt-2">{registrationError}</div>}
+            <button type="submit" className="btn btn-primary">Register</button>
+          </form>
         </div>
       </div>
     </div>
