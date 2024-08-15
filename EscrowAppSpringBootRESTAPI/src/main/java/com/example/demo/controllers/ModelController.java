@@ -35,10 +35,10 @@ public class ModelController {
     }
 
     // Get models by company ID
-    @GetMapping("/company/{companyId}")
-    public List<Model> getModelsByCompanyId(@PathVariable("companyId") int companyId) {
-        return modelService.getModelsByCompanyId(companyId);
-    }
+//    @GetMapping("/company/{companyId}")
+//    public List<Model> getModelsByCompanyId(@PathVariable("companyId") int companyId) {
+//        return modelService.getModelsByCompanyId(companyId);
+//    }
 
     // Update an existing model
     @PutMapping("/{id}")
