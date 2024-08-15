@@ -132,7 +132,7 @@ function Registration() {
     <div className="registration-container">
       <div className="card">
         <div className="card-header text-center">
-          <h2>Register as {formData.userType.charAt(0).toUpperCase() + formData.userType.slice(1)}</h2>
+          <h2>Registration </h2>
         </div>
         <div className="card-body">
           <form onSubmit={handleSubmit}>
