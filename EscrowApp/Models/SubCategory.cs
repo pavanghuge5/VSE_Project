@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace VSEscrowMgmtApp.Models;
+namespace EscrowApp.Models;
 
 public partial class SubCategory
 {
@@ -12,4 +12,6 @@ public partial class SubCategory
     public int? CatId { get; set; }
 
     public virtual Category? Cat { get; set; }
+
+    public virtual ICollection<Vehicle> Vehicles { get; set; } = new List<Vehicle>();
 }

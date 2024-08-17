@@ -1,16 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace VSEscrowMgmtApp.Models;
+namespace EscrowApp.Models;
 
 public partial class Buyer
 {
-
-    public Buyer()
-    {
-        Interests = new HashSet<Interest>();
-    }
-
     public int BId { get; set; }
 
     public string? Fname { get; set; }
@@ -29,7 +23,9 @@ public partial class Buyer
 
     public int? UserId { get; set; }
 
-    public virtual ICollection<Interest>? Interests { get; set; }
+    public virtual ICollection<Interest>? Interests { get; set; } = new List<Interest>();
 
     public virtual User? User { get; set; }
+
+    public virtual ICollection<Verification>? Verifications { get; set; } = new List<Verification>();
 }
