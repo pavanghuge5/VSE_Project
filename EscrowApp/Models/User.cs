@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace VSEscrowMgmtApp.Models;
+namespace EscrowApp.Models;
 
 public partial class User
 {
-
     public User()
     {
         Buyers = new HashSet<Buyer>();
         Sellers = new HashSet<Seller>();
     }
+
 
     public int Uid { get; set; }
 

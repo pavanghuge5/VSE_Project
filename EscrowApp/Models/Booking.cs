@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace VSEscrowMgmtApp.Models;
+namespace EscrowApp.Models;
 
 public partial class Booking
 {
@@ -11,7 +11,7 @@ public partial class Booking
 
     public int? InterestId { get; set; }
 
-    public DateOnly? Date { get; set; }
+    public DateTime? Date { get; set; }
 
     public virtual Interest? Interest { get; set; }
 

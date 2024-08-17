@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace VSEscrowMgmtApp.Models;
+namespace EscrowApp.Models;
 
 public partial class Interest
 {

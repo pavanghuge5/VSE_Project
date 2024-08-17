@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace VSEscrowMgmtApp.Models;
+namespace EscrowApp.Models;
 
 public partial class Seller
 {
@@ -24,4 +24,8 @@ public partial class Seller
     public int? UserId { get; set; }
 
     public virtual User? User { get; set; }
+
+    public virtual ICollection<Vehicle>? Vehicles { get; set; } = new List<Vehicle>();
+
+    public virtual ICollection<Verification>? Verifications { get; set; } = new List<Verification>();
 }

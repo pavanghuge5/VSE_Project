@@ -1,9 +1,8 @@
 
+using EscrowApp.Models;
 using Newtonsoft.Json;
-using System.Text.Json.Serialization;
-using VSEscrowMgmtApp.Models;
 
-namespace VSEscrowMgmtApp
+namespace EscrowApp
 {
     public class Program
     {

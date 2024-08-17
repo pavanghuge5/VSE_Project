@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Pomelo.EntityFrameworkCore.MySql.Scaffolding.Internal;
 
-namespace VSEscrowMgmtApp.Models;
+namespace EscrowApp.Models;
 
 public partial class VsescrowContext : DbContext
 {
@@ -22,7 +22,11 @@ public partial class VsescrowContext : DbContext
 
     public virtual DbSet<Category> Categories { get; set; }
 
+    public virtual DbSet<Company> Companies { get; set; }
+
     public virtual DbSet<Interest> Interests { get; set; }
+
+    public virtual DbSet<Model> Models { get; set; }
 
     public virtual DbSet<Payment> Payments { get; set; }
 
@@ -58,7 +62,9 @@ public partial class VsescrowContext : DbContext
 
             entity.Property(e => e.BookId).HasColumnName("book_id");
             entity.Property(e => e.Amount).HasColumnName("amount");
-            entity.Property(e => e.Date).HasColumnName("date");
+            entity.Property(e => e.Date)
+                .HasColumnType("datetime")
+                .HasColumnName("date");
             entity.Property(e => e.InterestId).HasColumnName("interest_id");
 
             entity.HasOne(d => d.Interest).WithMany(p => p.Bookings)
@@ -119,6 +125,18 @@ public partial class VsescrowContext : DbContext
                 .HasColumnName("cat_name");
         });
 
+        modelBuilder.Entity<Company>(entity =>
+        {
+            entity.HasKey(e => e.ComId).HasName("PRIMARY");
+
+            entity.ToTable("company");
+
+            entity.Property(e => e.ComId).HasColumnName("com_id");
+            entity.Property(e => e.ComName)
+                .HasMaxLength(45)
+                .HasColumnName("com_name");
+        });
+
         modelBuilder.Entity<Interest>(entity =>
         {
             entity.HasKey(e => e.InterestId).HasName("PRIMARY");
@@ -142,6 +160,28 @@ public partial class VsescrowContext : DbContext
                 .HasConstraintName("vehicle_id");
         });
 
+        modelBuilder.Entity<Model>(entity =>
+        {
+            entity.HasKey(e => e.ModelId).HasName("PRIMARY");
+
+            entity.ToTable("model");
+
+            entity.HasIndex(e => e.ComId, "fk_com_id_idx");
+
+            entity.HasIndex(e => e.ModelName, "model_name_UNIQUE").IsUnique();
+
+            entity.Property(e => e.ModelId).HasColumnName("model_id");
+            entity.Property(e => e.ComId).HasColumnName("com_id");
+            entity.Property(e => e.ModelName)
+                .HasMaxLength(45)
+                .HasColumnName("model_name");
+
+            entity.HasOne(d => d.Com).WithMany(p => p.Models)
+                .HasForeignKey(d => d.ComId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("fk_com_id");
+        });
+
         modelBuilder.Entity<Payment>(entity =>
         {
             entity.HasKey(e => e.PaymentId).HasName("PRIMARY");
@@ -155,7 +195,9 @@ public partial class VsescrowContext : DbContext
             entity.Property(e => e.PaymentId).HasColumnName("payment_id");
             entity.Property(e => e.Amount).HasColumnName("amount");
             entity.Property(e => e.BookId).HasColumnName("book_id");
-            entity.Property(e => e.Date).HasColumnName("date");
+            entity.Property(e => e.Date)
+                .HasColumnType("datetime")
+                .HasColumnName("date");
 
             entity.HasOne(d => d.Book).WithMany(p => p.Payments)
                 .HasForeignKey(d => d.BookId)
@@ -246,7 +288,12 @@ public partial class VsescrowContext : DbContext
 
             entity.HasIndex(e => e.Rid, "rid_fk_idx");
 
+            entity.HasIndex(e => e.Username, "username_UNIQUE").IsUnique();
+
             entity.Property(e => e.Uid).HasColumnName("uid");
+           /* entity.Property(e => e.Email)
+                .HasMaxLength(45)
+                .HasColumnName("email");*/
             entity.Property(e => e.Password)
                 .HasMaxLength(100)
                 .HasColumnName("password");
@@ -267,23 +314,76 @@ public partial class VsescrowContext : DbContext
 
             entity.ToTable("vehicle");
 
+            entity.HasIndex(e => e.CatId, "cat_id_fk_idx");
+
+            entity.HasIndex(e => e.ComId, "com_id_fk_idx");
+
+            entity.HasIndex(e => e.ModelId, "fk_model_id_idx");
+
+            entity.HasIndex(e => e.SId, "s_id_fk");
+
+            entity.HasIndex(e => e.ScatId, "scat_id_fk_idx");
+
             entity.Property(e => e.VId).HasColumnName("v_id");
-            entity.Property(e => e.ManufactrId)
+            entity.Property(e => e.CatId).HasColumnName("cat_id");
+            entity.Property(e => e.ComId).HasColumnName("com_id");
+            entity.Property(e => e.EngineCapacity).HasColumnName("engine_capacity");
+            entity.Property(e => e.FuelType)
+                .HasMaxLength(15)
+                .HasColumnName("fuel_type");
+            entity.Property(e => e.KmsDriven)
+                .HasMaxLength(10)
+                .HasColumnName("kms_driven");
+            entity.Property(e => e.ModelId).HasColumnName("model_id");
+            entity.Property(e => e.NoOfSeats).HasColumnName("no_of_seats");
+            entity.Property(e => e.Ownership).HasColumnName("ownership");
+            entity.Property(e => e.RegistrationYear)
+                .HasMaxLength(10)
+                .HasColumnName("registration_year");
+            entity.Property(e => e.Rto)
                 .HasMaxLength(45)
-                .HasColumnName("manufactr_id");
-            entity.Property(e => e.SId)
-                .HasMaxLength(45)
-                .HasColumnName("s_id");
-            entity.Property(e => e.VName)
-                .HasMaxLength(45)
-                .HasColumnName("v_name");
+                .HasColumnName("rto");
+            entity.Property(e => e.SId).HasColumnName("s_id");
+            entity.Property(e => e.ScatId).HasColumnName("scat_id");
+            entity.Property(e => e.Transmission)
+                .HasMaxLength(20)
+                .HasColumnName("transmission");
+            entity.Property(e => e.VImages)
+                .HasMaxLength(255)
+                .HasColumnName("v_images");
+            entity.Property(e => e.VPrice).HasColumnName("v_price");
+
+            entity.HasOne(d => d.Cat).WithMany(p => p.Vehicles)
+                .HasForeignKey(d => d.CatId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("cat_id_fk");
+
+            entity.HasOne(d => d.Com).WithMany(p => p.Vehicles)
+                .HasForeignKey(d => d.ComId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("com_id_fk");
+
+            entity.HasOne(d => d.ModelNavigation).WithMany(p => p.Vehicles)
+                .HasForeignKey(d => d.ModelId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("fk_model_id");
+
+            entity.HasOne(d => d.SIdNavigation).WithMany(p => p.Vehicles)
+                .HasForeignKey(d => d.SId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("s_id_fk");
+
+            entity.HasOne(d => d.Scat).WithMany(p => p.Vehicles)
+                .HasForeignKey(d => d.ScatId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("scat_id_fk");
         });
 
         modelBuilder.Entity<Verification>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("verification");
+            entity.HasKey(e => e.VerificationId).HasName("PRIMARY");
+
+            entity.ToTable("verification");
 
             entity.HasIndex(e => e.BId, "buyer_idx");
 
@@ -291,25 +391,23 @@ public partial class VsescrowContext : DbContext
 
             entity.HasIndex(e => e.SId, "seller_idx");
 
+            entity.Property(e => e.VerificationId).HasColumnName("verification_id");
             entity.Property(e => e.BId).HasColumnName("b_id");
-            entity.Property(e => e.BuyrConf)
-                .HasMaxLength(45)
-                .HasColumnName("buyr_conf");
+            entity.Property(e => e.BuyrConf).HasColumnName("buyr_conf");
             entity.Property(e => e.PaymentId).HasColumnName("payment_id");
             entity.Property(e => e.SId).HasColumnName("s_id");
-            entity.Property(e => e.SellrConf)
-                .HasMaxLength(45)
-                .HasColumnName("sellr_conf");
+            entity.Property(e => e.SellrConf).HasColumnName("sellr_conf");
+            entity.Property(e => e.AdminConf).HasColumnName("admin_conf");
 
-            entity.HasOne(d => d.BIdNavigation).WithMany()
+            entity.HasOne(d => d.BIdNavigation).WithMany(p => p.Verifications)
                 .HasForeignKey(d => d.BId)
                 .HasConstraintName("buyer");
 
-            entity.HasOne(d => d.Payment).WithMany()
+            entity.HasOne(d => d.Payment).WithMany(p => p.Verifications)
                 .HasForeignKey(d => d.PaymentId)
                 .HasConstraintName("paymentid");
 
-            entity.HasOne(d => d.SIdNavigation).WithMany()
+            entity.HasOne(d => d.SIdNavigation).WithMany(p => p.Verifications)
                 .HasForeignKey(d => d.SId)
                 .HasConstraintName("seller");
         });
