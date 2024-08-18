@@ -24,6 +24,10 @@ public class Booking {
 
     @Column(name = "date")
     private LocalDateTime date;
+    
+//    @OneToOne(mappedBy = "booking", cascade = CascadeType.ALL)
+//    @JsonIgnore
+//    private Payment payment;
 
     // Default constructor
     public Booking() {
@@ -36,6 +40,8 @@ public class Booking {
         this.amount = amount;
         this.interest = interest;
         this.date = date;
+//        this.payment = payment;
+//        , Payment payment
     }
 
     // Getters and Setters
@@ -70,4 +76,11 @@ public class Booking {
     public void setDate(LocalDateTime date) {
         this.date = date;
     }
+//    public Payment getPayment() {
+//        return payment;
+//    }
+//
+//    public void setPayment(Payment payment) {
+//        this.payment = payment;
+//    }
 }
