@@ -1,0 +1,33 @@
+.vehicle-form-container {
+    max-height: 90vh; /* Adjust to leave space for the navbar */
+    overflow-y: auto;
+    padding: 15px;
+}
+
+.form-card {
+    padding: 10px;
+}
+
+.form-header {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+}
+
+.form-body {
+    font-size: 0.9rem; /* Smaller font size */
+}
+
+.form-label {
+    font-size: 0.8rem; /* Smaller labels */
+    margin-bottom: 5px;
+}
+
+.form-control {
+    padding: 4px 8px; /* Smaller padding */
+    font-size: 0.9rem; /* Smaller font size */
+}
+
+.mb-3 {
+    margin-top: 10px ;
+    margin-bottom: 10px !important; /* Reduce margin between fields */
+}

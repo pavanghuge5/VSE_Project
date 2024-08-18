@@ -1,0 +1,31 @@
+.custom-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.custom-link {
+  font-weight: bold;
+  text-transform: uppercase;
+  transition: all 0.3s ease-in-out;
+  text-decoration: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+}
+
+.custom-link:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: #000000;
+}
+
+.custom-link.active {
+  background-color: #ffffff;
+  color: #FF9933;
+  border-radius: 5px;
+}
+
+.custom-link.disabled {
+  color: #cccccc;
+  pointer-events: none;
+  cursor: not-allowed;
+}

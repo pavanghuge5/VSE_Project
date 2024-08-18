@@ -8,7 +8,7 @@ export const loggedSlice = createSlice({
         },
         reducers : {
             login : (state) =>  { console.log("in login action"); return { loggedIn : true} } ,
-
+ 
             logout : (state) => { console.log("in logout action"); return { loggedIn : false}}
         }
 })

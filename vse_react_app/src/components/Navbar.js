@@ -1,27 +1,28 @@
-import React from 'react';
-import { NavLink } from 'react-router-dom';
-import "../styles/navbar.css";
+import { Link, useNavigate } from 'react-router-dom';
+import '../styles/custom.css';
 
-
-const Navbar = () => {
-  return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-light">
-      <div className="container-fluid">
-        
-        <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-          <span className="navbar-toggler-icon"></span>
-        </button>
-        <div className="collapse navbar-collapse" id="navbarNav">
-          <div className="navbar-nav">
-            <NavLink className="nav-link" to="/">Home</NavLink>
-            <NavLink className="nav-link" to="/login">Login</NavLink>
-            <NavLink className="nav-link" to="/registration">Registration</NavLink>
-            <NavLink className="nav-link" to="/about">About</NavLink>
-          </div>
-        </div>
-      </div>
-    </nav>
-  );
-};
-
-export default Navbar;
+export default function Navbar(){
+    return (
+        <div>
+        <nav className="navbar navbar-expand-lg navbar-light" style={{ backgroundColor: '#FF9933' }}>
+  <div className="container-fluid">
+    <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <ul className="navbar-nav">
+        <li className="nav-item">
+            <Link to="/" className='nav-link custom-link px-3'> Home </Link>
+        </li>
+        <li className="nav-item">
+            <Link to="registration" className='nav-link custom-link px-3'> Registration </Link>
+        </li>
+        <li className="nav-item">
+            <Link to="login" className='nav-link custom-link px-3'> Login </Link>
+        </li>
+        {/* <a class="nav-link" href="#">Features</a>
+        <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a> */}
+      </ul>
+    </div>
+  </div>
+</nav>
+</div>
+    )
+}
