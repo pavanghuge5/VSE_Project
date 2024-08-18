@@ -19,7 +19,7 @@ export default function BuyerHome() {
               </li>
               <li className="nav-item">
                 <Link to="/seller" className="nav-link custom-link px-3">Confirm Deal</Link>
-              </li> */}
+              </li> */} 
               <li className="nav-item">
                 <Link to="/logout" className="nav-link custom-link px-3">Logout</Link>
               </li>
